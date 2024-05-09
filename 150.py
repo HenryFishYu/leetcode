@@ -2,17 +2,27 @@ from typing import List
 
 
 class Solution:
-    def majorityElement(self, nums: List[int]) -> int:
-        candidate = None
-        votes = 0
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
 
-        for num in nums:
-            if candidate==num:
-                votes += 1
+        for token in tokens:
+            if token == "/":
+                right = stack.pop()
+                left = stack.pop()
+                stack.append(int(left/right))
                 continue
-            if votes>0:
-                votes -= 1
+            if token == "+":
+                stack.append(stack.pop()+stack.pop())
                 continue
-            candidate = num
-            votes = 1
-        return  candidate
+            if token == "*":
+                stack.append(stack.pop() * stack.pop())
+                continue
+            if token == "-":
+                right = stack.pop()
+                left = stack.pop()
+                stack.append(left-right)
+                continue
+            stack.append(int(token))
+        return stack.pop()
+
+print(Solution().evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"]))
