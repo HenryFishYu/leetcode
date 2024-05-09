@@ -28,6 +28,9 @@ class Solution:
                 if c==')':
                     res += digit * sign
                     return res,i
+                if c==' ':
+                    i+=1
+                    continue
             return res + digit*sign
 
         return evaluate(0)
