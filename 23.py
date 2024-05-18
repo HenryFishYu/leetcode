@@ -1,3 +1,4 @@
+import heapq
 import queue
 from typing import Optional, List
 
@@ -6,21 +7,21 @@ from basic_class import ListNode
 
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        if (lists is None) | (len(lists) == 0):
-            return None
-        priority_queue: queue.PriorityQueue[(int, int, ListNode)] = queue.PriorityQueue()
-        for i, listNode in enumerate(lists):
-            tempNode = listNode
-            while tempNode:
-                priority_queue.put((tempNode.val, i, tempNode))
-                tempNode = tempNode.next
+        dummy = ListNode(None)
+        temp = dummy
+        queue = []
+        count = 0
+        for listNode in lists:
+            if listNode:
+                heapq.heappush(queue,(listNode.val,count,listNode))
+                count += 1
 
-        result_node = priority_queue.get()
-        while not priority_queue.empty():
-            result_node.next = priority_queue.get()[2]
-            result_node = result_node.next
+        while len(queue)>0:
+            _,_,first = heapq.heappop(queue)
+            temp.next = first
+            temp = temp.next
+            if first.next:
+                heapq.heappush(queue,(first.next.val,count,first.next))
+                count += 1
 
-        return result_node
-
-if __name__ == "__main__":
-    Solution().mergeKLists([[]])
+        return dummy.next
