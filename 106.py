@@ -5,15 +5,20 @@ from basic_class import TreeNode
 
 class Solution:
     def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
-        if not postorder or not inorder:
+        if not inorder:
             return None
 
-        root = postorder[-1]
-        index = inorder.index(root)
+        inorder_index_map = {v:i for i,v in enumerate(inorder)}
 
-        node = TreeNode(root)
-        node.left = self.buildTree(postorder[:index],inorder[:index])
-        node.right = self.buildTree(inorder[index+1:],postorder[index:-1])
-        return node
+        def helper(l,r):
+            if l>r:
+                return None
+            root = TreeNode(postorder.pop())
+            index = inorder_index_map[root.val]
+            root.right = helper(index+1,r)
+            root.left = helper(l,index-1)
+            return root
+
+        return helper(0,len(inorder)-1)
 
 Solution().buildTree([9,3,15,20,7],[9,15,7,20,3])
