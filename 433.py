@@ -20,7 +20,7 @@ class Solution:
         queue.append((0,startGene))
 
         while queue:
-            times, current = queue.popleft()
+            times, current = queue.popleft( )
             if current==endGene:
                 return times
 
